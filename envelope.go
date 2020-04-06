@@ -7,12 +7,18 @@ import (
 	"regexp"
 )
 
+const RegexpStrKeyEqualValue = `^(?P<key>\w+) ?= ?(?P<value>\w+)?$`
+
+func RegexpKeyEqualValue() *regexp.Regexp {
+	return regexp.MustCompile(RegexpStrKeyEqualValue)
+}
+
 func Load(envPaths ...string) error {
 	if len(envPaths) == 0 {
 		envPaths = []string{".env"}
 	}
 
-	r := regexp.MustCompile(`^(?P<key>\w+) ?= ?(?P<value>\w+)?$`)
+	r := RegexpKeyEqualValue()
 	for _, envPath := range envPaths {
 		envFile, err := validateEnvFile(envPath)
 		if err != nil {
